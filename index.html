@@ -4,29 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yoyo X Yaya - Launcher</title>
-    <!-- استدعاء Tailwind للتصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { 
-            background-color: #1b2838; 
-            color: #c7d5e0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        }
+        body { background-color: #1b2838; color: #c7d5e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .sidebar { background-color: #171a21; }
-        .game-card { 
-            background-color: #2a475e; 
-            transition: transform 0.2s, box-shadow 0.2s; 
-        }
+        .game-card { background-color: #2a475e; transition: transform 0.2s, box-shadow 0.2s; }
         @media (min-width: 768px) {
             .game-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         }
         .play-btn { background: linear-gradient(to bottom, #799905 5%, #536904 95%); color: #d2efa9; }
         .play-btn:hover { background: linear-gradient(to bottom, #8ed029 5%, #6aa614 95%); color: white; }
-        .nav-active {
-            background-color: rgba(255, 255, 255, 0.1); color: white; font-weight: bold; border-bottom: 4px solid #66c0f4; 
-        }
+        .nav-active { background-color: rgba(255, 255, 255, 0.1); color: white; font-weight: bold; border-bottom: 4px solid #66c0f4; }
         @media (min-width: 768px) { .nav-active { border-bottom: none; border-right: 4px solid #66c0f4; } }
-        /* تصميم صفحة الدخول */
         .login-bg { background-color: #1b2838; }
         .input-field { background-color: #323e4c; color: white; border: 1px solid #171a21; }
         .input-field:focus { outline: none; border-color: #66c0f4; }
@@ -34,10 +23,8 @@
 </head>
 <body class="overflow-hidden select-none">
 
-    <!-- ========================================== -->
-    <!-- 1. شاشة تسجيل الدخول (بتظهر في الأول بس) -->
-    <!-- ========================================== -->
-    <div id="login-screen" class="login-bg absolute inset-0 z-50 flex items-center justify-center p-4">
+    <!-- 1. شاشة تسجيل الدخول -->
+    <div id="login-screen" class="login-bg absolute inset-0 z-[60] flex items-center justify-center p-4">
         <div class="bg-[#171a21] w-full max-w-md p-8 rounded-lg shadow-2xl">
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-extrabold text-white tracking-wider mb-2">
@@ -49,7 +36,7 @@
             <form id="loginForm" class="space-y-6">
                 <div>
                     <label class="block text-sm font-bold mb-2 text-gray-300">اسم المستخدم:</label>
-                    <input type="text" id="usernameInput" required class="input-field w-full p-3 rounded" placeholder="اكتب yoyo أو yaya أو أي اسم...">
+                    <input type="text" id="usernameInput" required class="input-field w-full p-3 rounded" placeholder="اكتب yoyo أو أي اسم آخر...">
                 </div>
                 <div>
                     <label class="block text-sm font-bold mb-2 text-gray-300">كلمة المرور:</label>
@@ -62,9 +49,42 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 2. واجهة البرنامج (مخفية لحد ما تسجل دخول) -->
-    <!-- ========================================== -->
+    <!-- 2. نافذة الدفع بالفيزا (مخفية) -->
+    <div id="payment-modal" class="hidden absolute inset-0 z-[70] bg-black bg-opacity-80 flex items-center justify-center p-4">
+        <div class="bg-[#171a21] w-full max-w-md p-6 rounded-lg shadow-2xl border border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">إتمام الشراء (Visa)</h2>
+                <button onclick="closePayment()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div class="bg-[#2a475e] p-4 rounded mb-6 text-center">
+                <p id="pay-game-name" class="text-gray-300 text-sm mb-1"></p>
+                <p id="pay-game-price" class="text-2xl font-bold text-green-400"></p>
+            </div>
+
+            <form id="visaForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-gray-400">رقم البطاقة (16 رقم)</label>
+                    <input type="text" required pattern="\d{16}" title="يجب إدخال 16 رقم" class="input-field w-full p-3 rounded text-left" dir="ltr" placeholder="1234 5678 9101 1121">
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold mb-1 text-gray-400">تاريخ الانتهاء</label>
+                        <input type="text" required placeholder="MM/YY" class="input-field w-full p-3 rounded text-center" dir="ltr">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold mb-1 text-gray-400">رمز الأمان (CVV)</label>
+                        <input type="password" required pattern="\d{3}" title="يجب إدخال 3 أرقام" class="input-field w-full p-3 rounded text-center" dir="ltr" placeholder="123">
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3 mt-4 rounded font-bold text-lg bg-green-600 hover:bg-green-500 text-white transition">
+                    دفع وإضافة للمكتبة
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. واجهة البرنامج الرئيسية -->
     <div id="main-app" class="hidden flex flex-col md:flex-row h-screen">
         
         <!-- القائمة -->
@@ -106,7 +126,6 @@
                     <h2 class="text-2xl md:text-3xl text-white font-bold uppercase">ألعابي</h2>
                 </div>
                 
-                <!-- شبكة ألعاب المكتبة (هتزيد لما تشتري من المتجر) -->
                 <div id="library-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                     <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
                         <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" class="w-full h-32 md:h-40 object-cover">
@@ -125,49 +144,45 @@
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                    <!-- لعبة في المتجر -->
                     <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
                         <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg" class="w-full h-32 md:h-40 object-cover">
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <h3 class="text-white font-bold text-lg md:text-xl mb-2">Grand Theft Auto V</h3>
                             <p class="store-price font-bold mb-4"></p> 
-                            <button onclick="downloadGame(this, 'Grand Theft Auto V', 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg')" class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                            <button onclick="handleStoreClick(this, 'Grand Theft Auto V', 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg')" class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
                         </div>
                     </div>
-                    <!-- لعبة تانية في المتجر -->
+                    
                     <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
                         <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg" class="w-full h-32 md:h-40 object-cover">
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <h3 class="text-white font-bold text-lg md:text-xl mb-2">Red Dead Redemption 2</h3>
                             <p class="store-price font-bold mb-4"></p> 
-                            <button onclick="downloadGame(this, 'Red Dead Redemption 2', 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg')" class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                            <button onclick="handleStoreClick(this, 'Red Dead Redemption 2', 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg')" class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- أكواد الجافاسكريبت للتشغيل -->
     <script>
         let currentUser = "";
         let isAdmin = false;
+        
+        // متغيرات عشان نحفظ بيانات اللعبة اللي اليوزر بيحاول يشتريها
+        let pendingGame = null;
 
-        // 1. نظام تسجيل الدخول
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // منع إعادة تحميل الصفحة
+            e.preventDefault();
             
-            // قراءة الاسم وتحديد الصلاحية
             currentUser = document.getElementById('usernameInput').value.toLowerCase().trim();
             const admins = ["yoyo", "yaya"];
             isAdmin = admins.includes(currentUser);
 
-            // إخفاء شاشة الدخول وإظهار الموقع
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
 
-            // تحديث الأسماء في القائمة
             document.getElementById('mobile-username').innerText = currentUser.toUpperCase();
             document.getElementById('desktop-username').innerText = currentUser.toUpperCase();
             
@@ -178,24 +193,18 @@
                 document.getElementById('desktop-role').innerText = "لاعب (User)";
                 document.getElementById('desktop-role').className = "text-xs text-blue-400";
             }
-
-            // تحديث أسعار المتجر بناءً على اللي سجل دخول
             setupStore();
         });
 
-        // 2. وظيفة التنقل بين المكتبة والمتجر
         function showSection(sectionName) {
             document.getElementById('section-library').classList.add('hidden');
             document.getElementById('section-store').classList.add('hidden');
-            
             document.getElementById('btn-library').classList.remove('nav-active');
             document.getElementById('btn-store').classList.remove('nav-active');
-
             document.getElementById('section-' + sectionName).classList.remove('hidden');
             document.getElementById('btn-' + sectionName).classList.add('nav-active');
         }
 
-        // 3. ضبط أسعار المتجر
         function setupStore() {
             const priceTags = document.querySelectorAll('.store-price');
             const storeBtns = document.querySelectorAll('.store-btn');
@@ -207,7 +216,7 @@
                     storeBtns[index].innerText = "تحميل مجاني الآن";
                     storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-green-600 hover:bg-green-500 text-white";
                 } else {
-                    tag.innerText = "السعر: 50.00$";
+                    tag.innerText = "السعر: 50.00$"; // السعر للناس العادية
                     tag.className = "store-price text-sm font-bold mb-4 text-white";
                     storeBtns[index].innerText = "شراء اللعبة";
                     storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-blue-600 hover:bg-blue-500 text-white";
@@ -215,21 +224,48 @@
             });
         }
 
-        // 4. وظيفة الشراء/التحميل (نقل اللعبة للمكتبة)
-        function downloadGame(btnElement, gameName, imageSrc) {
-            // رسالة الشراء
+        // لما حد يدوس على زرار المتجر
+        function handleStoreClick(btnElement, gameName, imageSrc) {
             if(isAdmin) {
-                alert("✅ تمت إضافة " + gameName + " مجاناً لمكتبتك!");
+                // لو أدمن ينزلها فوراً
+                alert("✅ تمت إضافة " + gameName + " مجاناً لمكتبتك يا مدير!");
+                addGameToLibrary(btnElement, gameName, imageSrc);
             } else {
-                alert("✅ تم شراء " + gameName + " بنجاح! تمت الإضافة لمكتبتك.");
+                // لو يوزر عادي، نفتح له شاشة الفيزا
+                pendingGame = { btn: btnElement, name: gameName, img: imageSrc };
+                document.getElementById('pay-game-name').innerText = "شراء لعبة: " + gameName;
+                document.getElementById('pay-game-price').innerText = "المطلوب سداده: 50.00$";
+                document.getElementById('payment-modal').classList.remove('hidden');
             }
+        }
 
-            // تغيير شكل الزرار عشان ميتداسش عليه تاني
+        // إغلاق شاشة الدفع
+        function closePayment() {
+            document.getElementById('payment-modal').classList.add('hidden');
+            document.getElementById('visaForm').reset();
+        }
+
+        // لما اليوزر يدخل بيانات الفيزا ويدوس دفع
+        document.getElementById('visaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // خصم الفلوس وهمياً ونقل اللعبة
+            alert("💳 تم خصم 50.00$ من بطاقتك بنجاح!\nتمت إضافة اللعبة إلى مكتبتك.");
+            
+            addGameToLibrary(pendingGame.btn, pendingGame.name, pendingGame.img);
+            
+            // قفل الشاشة وتفضية البيانات
+            closePayment();
+        });
+
+        // دالة نقل اللعبة للمكتبة
+        function addGameToLibrary(btnElement, gameName, imageSrc) {
+            // تعطيل زرار المتجر
             btnElement.innerText = "✔ موجودة في المكتبة";
             btnElement.className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-gray-600 text-gray-300 cursor-not-allowed";
             btnElement.disabled = true;
 
-            // إضافة اللعبة لشبكة المكتبة فعلياً
+            // إضافتها لشبكة المكتبة
             const libraryGrid = document.getElementById('library-grid');
             const newGameHTML = `
                 <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
@@ -243,7 +279,6 @@
             libraryGrid.insertAdjacentHTML('beforeend', newGameHTML);
         }
 
-        // 5. وظيفة زرار التشغيل في المكتبة
         function playGame(gameName) {
             alert("🚀 جاري تشغيل لعبة: " + gameName + "\nاستمتع!");
         }
