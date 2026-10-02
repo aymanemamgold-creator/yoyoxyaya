@@ -1,279 +1,130 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Game Launcher</title>
+    <title>Yoyo X Yaria - Game Launcher</title>
+    <!-- استدعاء مكتبة Tailwind للتصميم السريع -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        steam: {
-                            dark: '#171a21',
-                            base: '#1b2838',
-                            panel: '#2a475e',
-                            light: '#c7d5e0',
-                            accent: '#66c0f4',
-                            play1: '#75b022',
-                            play2: '#588a1b',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        /* Custom scrollbar to match the dark theme */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* ألوان مطابقة لستايل Steam بالظبط */
+        body { 
+            background-color: #1b2838; /* لون خلفية ستيم الأساسي */
+            color: #c7d5e0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         }
-        ::-webkit-scrollbar-track {
-            background: #171a21; 
+        .sidebar { 
+            background-color: #171a21; /* لون القائمة الجانبية */
         }
-        ::-webkit-scrollbar-thumb {
-            background: #2a475e; 
-            border-radius: 4px;
+        .game-card { 
+            background-color: #2a475e; /* لون كروت الألعاب */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s; 
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #66c0f4; 
+        .game-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
-        body {
-            /* Prevent text selection to feel more like a native app */
-            user-select: none;
+        /* الزرار الأخضر بتاع التشغيل زي ستيم */
+        .play-btn { 
+            background: linear-gradient(to bottom, #799905 5%, #536904 95%);
+            color: #d2efa9; 
+            text-shadow: 1px 1px rgba(0,0,0,0.3);
+        }
+        .play-btn:hover { 
+            background: linear-gradient(to bottom, #8ed029 5%, #6aa614 95%);
+            color: white;
+        }
+        .nav-item.active {
+            color: #ffffff;
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body class="bg-steam-base text-steam-light font-sans h-screen flex overflow-hidden">
+<body class="flex h-screen overflow-hidden select-none">
 
-    <!-- Sidebar -->
-    <aside class="w-16 md:w-64 bg-steam-dark flex flex-col justify-between shadow-2xl z-10 transition-all duration-300">
+    <!-- القائمة الجانبية (Sidebar) -->
+    <div class="sidebar w-64 p-6 flex flex-col justify-between shadow-2xl z-10">
         <div>
-            <!-- Logo Area -->
-            <div class="h-20 flex items-center justify-center md:justify-start md:px-6 border-b border-gray-800">
-                <i class="ph-fill ph-game-controller text-4xl text-steam-light"></i>
-                <span class="hidden md:block ml-3 text-2xl font-bold tracking-wider text-white">NEXUS</span>
-            </div>
-
-            <!-- Navigation Links -->
-            <nav class="mt-6 flex flex-col gap-2 px-2 md:px-4">
-                <a href="#" class="flex items-center px-4 py-3 rounded-md bg-steam-panel bg-opacity-40 text-white font-medium hover:bg-steam-panel transition-colors group">
-                    <i class="ph ph-storefront text-xl group-hover:text-steam-accent transition-colors"></i>
-                    <span class="hidden md:block ml-4">Store</span>
-                </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-md text-gray-400 font-medium hover:bg-steam-panel hover:text-white transition-colors group">
-                    <i class="ph ph-books text-xl group-hover:text-steam-accent transition-colors"></i>
-                    <span class="hidden md:block ml-4">Library</span>
-                </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-md text-gray-400 font-medium hover:bg-steam-panel hover:text-white transition-colors group">
-                    <i class="ph ph-users text-xl group-hover:text-steam-accent transition-colors"></i>
-                    <span class="hidden md:block ml-4">Community</span>
-                </a>
-            </nav>
+            <!-- اسم الموقع الخاص بك -->
+            <h1 class="text-3xl font-extrabold text-white mb-10 tracking-wider text-center">
+                Yoyo X <span class="text-blue-400">Yaria</span>
+            </h1>
+            
+            <!-- القوائم (Store, Library, Friends) -->
+            <ul class="space-y-2 text-lg">
+                <li class="nav-item p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center gap-2">
+                    <span>🛒</span> المتجر (Store)
+                </li>
+                <li class="nav-item active p-3 rounded cursor-pointer transition flex items-center gap-2">
+                    <span>📚</span> المكتبة (Library)
+                </li>
+                <li class="nav-item p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center gap-2">
+                    <span>👥</span> الأصدقاء (Friends)
+                </li>
+            </ul>
         </div>
-
-        <!-- Settings & Profile -->
-        <div class="p-4 border-t border-gray-800">
-            <a href="#" class="flex items-center px-2 md:px-4 py-2 rounded-md text-gray-400 font-medium hover:text-white transition-colors">
-                <img src="https://placehold.co/40x40/2a475e/66c0f4?text=U" alt="User" class="w-8 h-8 rounded-full border-2 border-steam-panel">
-                <span class="hidden md:block ml-3 text-sm">Gamer123</span>
-            </a>
-            <a href="#" class="mt-2 flex items-center px-2 md:px-4 py-2 rounded-md text-gray-400 font-medium hover:text-white transition-colors">
-                <i class="ph ph-gear text-xl"></i>
-                <span class="hidden md:block ml-3 text-sm">Settings</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col overflow-hidden relative">
         
-        <!-- Top Bar -->
-        <header class="h-20 flex items-center justify-between px-8 z-10 bg-gradient-to-b from-steam-dark/80 to-transparent absolute w-full pointer-events-none">
-            <div class="pointer-events-auto flex gap-4">
-                <button class="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center hover:bg-black/60 transition-colors">
-                    <i class="ph ph-caret-left text-white"></i>
-                </button>
-                <button class="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center hover:bg-black/60 transition-colors text-gray-500">
-                    <i class="ph ph-caret-right"></i>
-                </button>
+        <!-- معلومات حساب اللاعب -->
+        <div class="flex items-center gap-3 border-t border-gray-700 pt-4 cursor-pointer hover:text-white mt-auto">
+            <div class="w-10 h-10 bg-gray-600 rounded-full border-2 border-blue-400"></div>
+            <div>
+                <div class="text-white font-bold text-sm">Player_Yoyo</div>
+                <div class="text-xs text-blue-400">متصل (Online)</div>
             </div>
-            <div class="pointer-events-auto relative hidden md:block">
-                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                <input type="text" placeholder="Search games..." class="bg-steam-dark/60 text-sm text-white rounded-full pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-1 focus:ring-steam-accent focus:bg-steam-panel/80 transition-all backdrop-blur-sm">
-            </div>
-        </header>
-
-        <!-- Scrollable Area -->
-        <div class="flex-1 overflow-y-auto">
-            
-            <!-- Featured Banner -->
-            <div class="relative h-[60vh] min-h-[400px] w-full bg-steam-panel">
-                <!-- Background Image (Placeholder) -->
-                <img src="https://placehold.co/1920x1080/1b2838/445c73?text=Featured+Game+Artwork" alt="Featured Game" class="w-full h-full object-cover opacity-60">
-                
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-steam-base via-steam-base/40 to-transparent"></div>
-                <div class="absolute inset-0 bg-gradient-to-r from-steam-base via-steam-base/80 md:via-transparent to-transparent"></div>
-
-                <!-- Banner Content -->
-                <div class="absolute bottom-0 left-0 w-full p-8 md:p-12 z-10">
-                    <img src="https://placehold.co/200x80/transparent/ffffff?text=GAME+LOGO" alt="Logo" class="mb-4 w-48 md:w-64">
-                    <p class="max-w-2xl text-gray-300 text-sm md:text-base mb-6 line-clamp-3">
-                        Experience the ultimate sci-fi RPG adventure. Explore a vast open world, upgrade your cybernetic implants, and shape the destiny of a dark, dystopian metropolis. Your choices matter.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                        <!-- Play Button (Steam Green) -->
-                        <button class="bg-gradient-to-b from-steam-play1 to-steam-play2 hover:from-[#8cd029] hover:to-[#6aa621] text-white font-bold py-3 px-12 rounded-sm shadow-lg text-lg flex items-center gap-3 transition-all transform hover:scale-105 active:scale-95">
-                            <i class="ph-fill ph-play"></i>
-                            PLAY
-                        </button>
-                        
-                        <div class="flex flex-col">
-                            <span class="text-xs text-gray-400 uppercase font-semibold">Last Played</span>
-                            <span class="text-sm text-steam-light">Today</span>
-                        </div>
-                        <div class="flex flex-col border-l border-gray-600 pl-4">
-                            <span class="text-xs text-gray-400 uppercase font-semibold">Play Time</span>
-                            <span class="text-sm text-steam-light">124 Hours</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Library Section -->
-            <div class="px-8 py-10">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-white tracking-wide">All Games <span class="text-gray-500 text-sm font-normal ml-2">(12)</span></h2>
-                    
-                    <div class="flex gap-2 text-gray-400">
-                        <button class="p-2 hover:text-white hover:bg-steam-panel rounded transition-colors bg-steam-panel text-white">
-                            <i class="ph-fill ph-squares-four text-xl"></i>
-                        </button>
-                        <button class="p-2 hover:text-white hover:bg-steam-panel rounded transition-colors">
-                            <i class="ph-fill ph-list text-xl"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Games Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                    
-                    <!-- Game Card 1 -->
-                    <div class="group relative bg-steam-panel rounded overflow-hidden shadow-lg hover:shadow-steam-accent/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                        <div class="aspect-[3/4] w-full relative">
-                            <img src="https://placehold.co/300x400/2a475e/66c0f4?text=Game+1" class="w-full h-full object-cover group-hover:brightness-110 transition-all">
-                            <!-- Hover Overlay -->
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <button class="bg-white/10 hover:bg-white/20 p-4 rounded-full backdrop-blur-sm transition-all transform scale-50 group-hover:scale-100">
-                                    <i class="ph-fill ph-play text-2xl text-white"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-3">
-                            <h3 class="text-sm font-semibold text-white truncate">Stellar Explorer</h3>
-                            <p class="text-xs text-gray-400 mt-1">Installed</p>
-                        </div>
-                        <!-- Update Indicator -->
-                        <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-steam-accent hidden"></div>
-                    </div>
-
-                    <!-- Game Card 2 -->
-                    <div class="group relative bg-steam-panel rounded overflow-hidden shadow-lg hover:shadow-steam-accent/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                        <div class="aspect-[3/4] w-full relative">
-                            <img src="https://placehold.co/300x400/203347/ffffff?text=Game+2" class="w-full h-full object-cover group-hover:brightness-110 transition-all grayscale opacity-50">
-                        </div>
-                        <div class="p-3">
-                            <h3 class="text-sm font-semibold text-gray-400 truncate">Medieval Warfare</h3>
-                            <div class="w-full bg-gray-700 h-1 mt-2 rounded overflow-hidden">
-                                <div class="bg-steam-accent h-full w-1/2"></div>
-                            </div>
-                            <p class="text-xs text-steam-accent mt-1">Updating... 50%</p>
-                        </div>
-                    </div>
-
-                    <!-- Game Card 3 -->
-                    <div class="group relative bg-steam-panel rounded overflow-hidden shadow-lg hover:shadow-steam-accent/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                        <div class="aspect-[3/4] w-full relative">
-                            <img src="https://placehold.co/300x400/3d2b2b/ff6b6b?text=Game+3" class="w-full h-full object-cover group-hover:brightness-110 transition-all">
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <button class="bg-white/10 hover:bg-white/20 p-4 rounded-full backdrop-blur-sm transition-all transform scale-50 group-hover:scale-100">
-                                    <i class="ph-fill ph-play text-2xl text-white"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-3">
-                            <h3 class="text-sm font-semibold text-white truncate">Racing Apex</h3>
-                            <p class="text-xs text-gray-400 mt-1">Not Installed</p>
-                        </div>
-                    </div>
-
-                    <!-- Game Card 4 -->
-                    <div class="group relative bg-steam-panel rounded overflow-hidden shadow-lg hover:shadow-steam-accent/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                        <div class="aspect-[3/4] w-full relative">
-                            <img src="https://placehold.co/300x400/172e21/4ade80?text=Game+4" class="w-full h-full object-cover group-hover:brightness-110 transition-all">
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <button class="bg-white/10 hover:bg-white/20 p-4 rounded-full backdrop-blur-sm transition-all transform scale-50 group-hover:scale-100">
-                                    <i class="ph-fill ph-play text-2xl text-white"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-3">
-                            <h3 class="text-sm font-semibold text-white truncate">Survival Craft</h3>
-                            <p class="text-xs text-gray-400 mt-1">Installed</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Game Card 5 -->
-                    <div class="group relative bg-steam-panel rounded overflow-hidden shadow-lg hover:shadow-steam-accent/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer hidden sm:block">
-                        <div class="aspect-[3/4] w-full relative">
-                            <img src="https://placehold.co/300x400/403254/c084fc?text=Game+5" class="w-full h-full object-cover group-hover:brightness-110 transition-all opacity-50 grayscale">
-                        </div>
-                        <div class="p-3">
-                            <h3 class="text-sm font-semibold text-gray-400 truncate">Puzzle Quest</h3>
-                            <p class="text-xs text-gray-500 mt-1 flex items-center gap-1"><i class="ph ph-cloud-arrow-down"></i> Ready to Install</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            
-            <!-- Footer padding -->
-            <div class="h-12"></div>
         </div>
-    </main>
+    </div>
 
-    <script>
-        // Simple script to handle visual interactions (e.g., clicking games)
-        document.addEventListener('DOMContentLoaded', () => {
-            const gameCards = document.querySelectorAll('.grid > div');
+    <!-- مساحة عرض الألعاب (Main Content) -->
+    <div class="flex-1 p-8 overflow-y-auto">
+        <div class="flex justify-between items-end mb-8 border-b border-gray-700 pb-4">
+            <h2 class="text-3xl text-white font-bold uppercase tracking-wide">ألعابي</h2>
+            <div class="text-sm text-gray-400">3 ألعاب جاهزة</div>
+        </div>
+        
+        <!-- شبكة الألعاب -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             
-            gameCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    // In a real Electron app, this would send an IPC message to the main process
-                    // to launch the game executable or navigate to the game details page.
-                    const title = card.querySelector('h3').innerText;
-                    console.log(`Clicked on: ${title}`);
-                });
-            });
-            
-            const mainPlayBtn = document.querySelector('button.bg-gradient-to-b');
-            if(mainPlayBtn) {
-                mainPlayBtn.addEventListener('click', () => {
-                    console.log('Launching Featured Game...');
-                    // Add click animation class temporarily
-                    mainPlayBtn.classList.add('scale-95');
-                    setTimeout(() => mainPlayBtn.classList.remove('scale-95'), 150);
-                });
-            }
-        });
-    </script>
+            <!-- اللعبة الأولى -->
+            <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
+                <!-- صورة غلاف اللعبة -->
+                <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" alt="CS2" class="w-full h-40 object-cover">
+                <div class="p-4 flex-1 flex flex-col justify-between">
+                    <h3 class="text-white font-bold text-xl mb-1">Counter-Strike 2</h3>
+                    <p class="text-xs text-gray-400 mb-4">وقت اللعب: 120 ساعة</p>
+                    <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm tracking-wider">
+                        ▶ تشغيل
+                    </button>
+                </div>
+            </div>
+
+            <!-- اللعبة الثانية -->
+            <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
+                <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/570/header.jpg" alt="Dota 2" class="w-full h-40 object-cover">
+                <div class="p-4 flex-1 flex flex-col justify-between">
+                    <h3 class="text-white font-bold text-xl mb-1">Dota 2</h3>
+                    <p class="text-xs text-gray-400 mb-4">وقت اللعب: 45 ساعة</p>
+                    <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm tracking-wider">
+                        ▶ تشغيل
+                    </button>
+                </div>
+            </div>
+
+             <!-- اللعبة الثالثة (مثال للعبة تحتاج تحديث) -->
+            <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
+                <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg" alt="Apex Legends" class="w-full h-40 object-cover">
+                <div class="p-4 flex-1 flex flex-col justify-between">
+                    <h3 class="text-white font-bold text-xl mb-1">Apex Legends</h3>
+                    <p class="text-xs text-yellow-500 mb-4">تحتاج إلى تحديث</p>
+                    <!-- زر أزرق للتحديث -->
+                    <button class="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded font-bold w-full uppercase text-sm tracking-wider transition">
+                        ↻ تحديث
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </body>
 </html>
