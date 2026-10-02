@@ -17,154 +17,173 @@
             background-color: #2a475e; 
             transition: transform 0.2s, box-shadow 0.2s; 
         }
-        /* تأثيرات الكمبيوتر فقط */
         @media (min-width: 768px) {
-            .game-card:hover { 
-                transform: translateY(-5px); 
-                box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            }
+            .game-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         }
-        .play-btn { 
-            background: linear-gradient(to bottom, #799905 5%, #536904 95%);
-            color: #d2efa9; 
-        }
-        .play-btn:hover { 
-            background: linear-gradient(to bottom, #8ed029 5%, #6aa614 95%);
-            color: white;
-        }
-        /* شكل الزرار النشط */
+        .play-btn { background: linear-gradient(to bottom, #799905 5%, #536904 95%); color: #d2efa9; }
+        .play-btn:hover { background: linear-gradient(to bottom, #8ed029 5%, #6aa614 95%); color: white; }
         .nav-active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-weight: bold;
-            border-bottom: 4px solid #66c0f4; /* خط من تحت للموبايل */
+            background-color: rgba(255, 255, 255, 0.1); color: white; font-weight: bold; border-bottom: 4px solid #66c0f4; 
         }
-        @media (min-width: 768px) {
-            .nav-active {
-                border-bottom: none;
-                border-right: 4px solid #66c0f4; /* خط من الجنب للكمبيوتر */
-            }
-        }
+        @media (min-width: 768px) { .nav-active { border-bottom: none; border-right: 4px solid #66c0f4; } }
+        /* تصميم صفحة الدخول */
+        .login-bg { background-color: #1b2838; }
+        .input-field { background-color: #323e4c; color: white; border: 1px solid #171a21; }
+        .input-field:focus { outline: none; border-color: #66c0f4; }
     </style>
 </head>
-<!-- هنا الكود بيقسم الشاشة بالعرض للكمبيوتر وبالطول للموبايل -->
-<body class="flex flex-col md:flex-row h-screen overflow-hidden select-none">
+<body class="overflow-hidden select-none">
 
-    <!-- القائمة (شريط علوي للموبايل / قائمة جانبية للكمبيوتر) -->
-    <div class="sidebar w-full md:w-64 flex flex-col shadow-2xl z-10 md:h-full">
-        
-        <!-- اللوجو ومعلومات المستخدم في الموبايل -->
-        <div class="flex justify-between items-center md:items-start p-4 md:p-6">
-            <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-wider">
-                Yoyo X <span class="text-blue-400">Yaya</span>
-            </h1>
+    <!-- ========================================== -->
+    <!-- 1. شاشة تسجيل الدخول (بتظهر في الأول بس) -->
+    <!-- ========================================== -->
+    <div id="login-screen" class="login-bg absolute inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-[#171a21] w-full max-w-md p-8 rounded-lg shadow-2xl">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-extrabold text-white tracking-wider mb-2">
+                    Yoyo X <span class="text-blue-400">Yaya</span>
+                </h1>
+                <p class="text-gray-400">سجل دخولك لبدء اللعب</p>
+            </div>
             
-            <!-- بيظهر في الموبايل بس -->
-            <div class="md:hidden flex items-center gap-2">
-                <div class="text-white font-bold text-xs" id="mobile-username">yoyo</div>
-                <div class="w-8 h-8 bg-gray-600 rounded-full border border-blue-400"></div>
-            </div>
-        </div>
-        
-        <!-- أزرار التنقل (المكتبة والمتجر) -->
-        <ul class="flex flex-row md:flex-col text-sm md:text-lg px-2 pb-2 md:p-6 overflow-x-auto gap-2">
-            <li id="btn-library" onclick="showSection('library')" class="nav-active flex-1 md:flex-none p-3 rounded cursor-pointer transition flex items-center justify-center md:justify-start gap-2">
-                <span>📚</span> المكتبة
-            </li>
-            <li id="btn-store" onclick="showSection('store')" class="flex-1 md:flex-none p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center justify-center md:justify-start gap-2">
-                <span>🛒</span> المتجر
-            </li>
-        </ul>
-        
-        <!-- معلومات الحساب (بتظهر في الكمبيوتر بس من تحت) -->
-        <div class="hidden md:flex items-center gap-3 border-t border-gray-700 p-6 mt-auto">
-            <div class="w-10 h-10 bg-gray-600 rounded-full border-2 border-blue-400"></div>
-            <div>
-                <div id="desktop-username" class="text-white font-bold text-sm">yoyo</div>
-                <div id="desktop-role" class="text-xs text-red-400">مدير النظام (Admin)</div>
-            </div>
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-bold mb-2 text-gray-300">اسم المستخدم:</label>
+                    <input type="text" id="usernameInput" required class="input-field w-full p-3 rounded" placeholder="اكتب yoyo أو yaya أو أي اسم...">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2 text-gray-300">كلمة المرور:</label>
+                    <input type="password" required class="input-field w-full p-3 rounded" placeholder="*****">
+                </div>
+                <button type="submit" class="w-full py-3 rounded font-bold text-lg bg-blue-600 hover:bg-blue-500 text-white transition">
+                    دخول الآن
+                </button>
+            </form>
         </div>
     </div>
 
-    <!-- المساحة الرئيسية لعرض الألعاب -->
-    <div class="flex-1 p-4 md:p-8 overflow-y-auto">
+    <!-- ========================================== -->
+    <!-- 2. واجهة البرنامج (مخفية لحد ما تسجل دخول) -->
+    <!-- ========================================== -->
+    <div id="main-app" class="hidden flex flex-col md:flex-row h-screen">
         
-        <!-- قسم المكتبة -->
-        <div id="section-library" class="block">
-            <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-2">
-                <h2 class="text-2xl md:text-3xl text-white font-bold uppercase">ألعابي</h2>
+        <!-- القائمة -->
+        <div class="sidebar w-full md:w-64 flex flex-col shadow-2xl z-10 md:h-full">
+            <div class="flex justify-between items-center md:items-start p-4 md:p-6">
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-wider">
+                    Yoyo X <span class="text-blue-400">Yaya</span>
+                </h1>
+                <div class="md:hidden flex items-center gap-2">
+                    <div class="text-white font-bold text-xs" id="mobile-username"></div>
+                    <div class="w-8 h-8 bg-gray-600 rounded-full border border-blue-400"></div>
+                </div>
             </div>
             
-            <!-- شبكة الألعاب (1 كارت للموبايل، 2 للتابلت، 4 للكمبيوتر) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                <!-- لعبة 1 -->
-                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
-                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" class="w-full h-32 md:h-40 object-cover">
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <h3 class="text-white font-bold text-lg md:text-xl mb-1">Counter-Strike 2</h3>
-                        <p class="text-xs text-gray-400 mb-4">وقت اللعب: 120 ساعة</p>
-                        <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm">▶ تشغيل</button>
-                    </div>
-                </div>
-                <!-- لعبة 2 -->
-                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
-                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg" class="w-full h-32 md:h-40 object-cover">
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <h3 class="text-white font-bold text-lg md:text-xl mb-1">Apex Legends</h3>
-                        <p class="text-xs text-gray-400 mb-4">وقت اللعب: 45 ساعة</p>
-                        <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm">▶ تشغيل</button>
-                    </div>
+            <ul class="flex flex-row md:flex-col text-sm md:text-lg px-2 pb-2 md:p-6 overflow-x-auto gap-2">
+                <li id="btn-library" onclick="showSection('library')" class="nav-active flex-1 md:flex-none p-3 rounded cursor-pointer transition flex items-center justify-center md:justify-start gap-2">
+                    <span>📚</span> المكتبة
+                </li>
+                <li id="btn-store" onclick="showSection('store')" class="flex-1 md:flex-none p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center justify-center md:justify-start gap-2">
+                    <span>🛒</span> المتجر
+                </li>
+            </ul>
+            
+            <div class="hidden md:flex items-center gap-3 border-t border-gray-700 p-6 mt-auto">
+                <div class="w-10 h-10 bg-gray-600 rounded-full border-2 border-blue-400"></div>
+                <div>
+                    <div id="desktop-username" class="text-white font-bold text-sm"></div>
+                    <div id="desktop-role" class="text-xs"></div>
                 </div>
             </div>
         </div>
 
-        <!-- قسم المتجر -->
-        <div id="section-store" class="hidden">
-            <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-2">
-                <h2 class="text-2xl md:text-3xl text-white font-bold uppercase">المتجر</h2>
-            </div>
+        <!-- مساحة عرض الألعاب -->
+        <div class="flex-1 p-4 md:p-8 overflow-y-auto">
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                <!-- لعبة المتجر 1 -->
-                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
-                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg" class="w-full h-32 md:h-40 object-cover">
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <h3 class="text-white font-bold text-lg md:text-xl mb-2">Grand Theft Auto V</h3>
-                        <p class="store-price font-bold mb-4"></p> 
-                        <button class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
-                    </div>
+            <!-- قسم المكتبة -->
+            <div id="section-library" class="block">
+                <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-2">
+                    <h2 class="text-2xl md:text-3xl text-white font-bold uppercase">ألعابي</h2>
                 </div>
-                <!-- لعبة المتجر 2 -->
-                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
-                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg" class="w-full h-32 md:h-40 object-cover">
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <h3 class="text-white font-bold text-lg md:text-xl mb-2">Red Dead Redemption 2</h3>
-                        <p class="store-price font-bold mb-4"></p> 
-                        <button class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                
+                <!-- شبكة ألعاب المكتبة (هتزيد لما تشتري من المتجر) -->
+                <div id="library-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                    <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" class="w-full h-32 md:h-40 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <h3 class="text-white font-bold text-lg md:text-xl mb-1">Counter-Strike 2</h3>
+                            <button onclick="playGame('Counter-Strike 2')" class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm mt-4">▶ تشغيل</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+            <!-- قسم المتجر -->
+            <div id="section-store" class="hidden">
+                <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-2">
+                    <h2 class="text-2xl md:text-3xl text-white font-bold uppercase">المتجر</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                    <!-- لعبة في المتجر -->
+                    <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg" class="w-full h-32 md:h-40 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <h3 class="text-white font-bold text-lg md:text-xl mb-2">Grand Theft Auto V</h3>
+                            <p class="store-price font-bold mb-4"></p> 
+                            <button onclick="downloadGame(this, 'Grand Theft Auto V', 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg')" class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                        </div>
+                    </div>
+                    <!-- لعبة تانية في المتجر -->
+                    <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg" class="w-full h-32 md:h-40 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <h3 class="text-white font-bold text-lg md:text-xl mb-2">Red Dead Redemption 2</h3>
+                            <p class="store-price font-bold mb-4"></p> 
+                            <button onclick="downloadGame(this, 'Red Dead Redemption 2', 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg')" class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- كود الجافاسكريبت -->
+    <!-- أكواد الجافاسكريبت للتشغيل -->
     <script>
-        // إعدادات المستخدم
-        let currentUser = "yoyo"; // غيرها لأي اسم تاني عشان تشوف نظام الفلوس
-        const admins = ["yoyo", "yaya"]; 
-        const isAdmin = admins.includes(currentUser);
+        let currentUser = "";
+        let isAdmin = false;
 
-        // تحديث الاسم في الموبايل والكمبيوتر
-        document.getElementById('mobile-username').innerText = currentUser.toUpperCase();
-        document.getElementById('desktop-username').innerText = currentUser.toUpperCase();
-        
-        if(!isAdmin) {
-            document.getElementById('desktop-role').innerText = "لاعب (User)";
-            document.getElementById('desktop-role').className = "text-xs text-blue-400";
-        }
+        // 1. نظام تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+            
+            // قراءة الاسم وتحديد الصلاحية
+            currentUser = document.getElementById('usernameInput').value.toLowerCase().trim();
+            const admins = ["yoyo", "yaya"];
+            isAdmin = admins.includes(currentUser);
 
-        // كود التنقل
+            // إخفاء شاشة الدخول وإظهار الموقع
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+
+            // تحديث الأسماء في القائمة
+            document.getElementById('mobile-username').innerText = currentUser.toUpperCase();
+            document.getElementById('desktop-username').innerText = currentUser.toUpperCase();
+            
+            if(isAdmin) {
+                document.getElementById('desktop-role').innerText = "مدير النظام (Admin)";
+                document.getElementById('desktop-role').className = "text-xs text-red-400 font-bold";
+            } else {
+                document.getElementById('desktop-role').innerText = "لاعب (User)";
+                document.getElementById('desktop-role').className = "text-xs text-blue-400";
+            }
+
+            // تحديث أسعار المتجر بناءً على اللي سجل دخول
+            setupStore();
+        });
+
+        // 2. وظيفة التنقل بين المكتبة والمتجر
         function showSection(sectionName) {
             document.getElementById('section-library').classList.add('hidden');
             document.getElementById('section-store').classList.add('hidden');
@@ -176,23 +195,58 @@
             document.getElementById('btn-' + sectionName).classList.add('nav-active');
         }
 
-        // كود التسعير (مجاناً للمدير - بفلوس للمستخدم)
-        const priceTags = document.querySelectorAll('.store-price');
-        const storeBtns = document.querySelectorAll('.store-btn');
+        // 3. ضبط أسعار المتجر
+        function setupStore() {
+            const priceTags = document.querySelectorAll('.store-price');
+            const storeBtns = document.querySelectorAll('.store-btn');
+            
+            priceTags.forEach((tag, index) => {
+                if (isAdmin) {
+                    tag.innerText = "مجاناً للمدير 🎁";
+                    tag.className = "store-price text-sm font-bold mb-4 text-green-400";
+                    storeBtns[index].innerText = "تحميل مجاني الآن";
+                    storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-green-600 hover:bg-green-500 text-white";
+                } else {
+                    tag.innerText = "السعر: 50.00$";
+                    tag.className = "store-price text-sm font-bold mb-4 text-white";
+                    storeBtns[index].innerText = "شراء اللعبة";
+                    storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-blue-600 hover:bg-blue-500 text-white";
+                }
+            });
+        }
 
-        priceTags.forEach((tag, index) => {
-            if (isAdmin) {
-                tag.innerText = "مجاناً 🎁";
-                tag.className = "store-price text-sm font-bold mb-4 text-green-400";
-                storeBtns[index].innerText = "تحميل مجاني";
-                storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-green-600 hover:bg-green-500 text-white";
+        // 4. وظيفة الشراء/التحميل (نقل اللعبة للمكتبة)
+        function downloadGame(btnElement, gameName, imageSrc) {
+            // رسالة الشراء
+            if(isAdmin) {
+                alert("✅ تمت إضافة " + gameName + " مجاناً لمكتبتك!");
             } else {
-                tag.innerText = "السعر: 50.00$";
-                tag.className = "store-price text-sm font-bold mb-4 text-white";
-                storeBtns[index].innerText = "شراء اللعبة";
-                storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-blue-600 hover:bg-blue-500 text-white";
+                alert("✅ تم شراء " + gameName + " بنجاح! تمت الإضافة لمكتبتك.");
             }
-        });
+
+            // تغيير شكل الزرار عشان ميتداسش عليه تاني
+            btnElement.innerText = "✔ موجودة في المكتبة";
+            btnElement.className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-gray-600 text-gray-300 cursor-not-allowed";
+            btnElement.disabled = true;
+
+            // إضافة اللعبة لشبكة المكتبة فعلياً
+            const libraryGrid = document.getElementById('library-grid');
+            const newGameHTML = `
+                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
+                    <img src="${imageSrc}" class="w-full h-32 md:h-40 object-cover">
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h3 class="text-white font-bold text-lg md:text-xl mb-1">${gameName}</h3>
+                        <button onclick="playGame('${gameName}')" class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm mt-4">▶ تشغيل</button>
+                    </div>
+                </div>
+            `;
+            libraryGrid.insertAdjacentHTML('beforeend', newGameHTML);
+        }
+
+        // 5. وظيفة زرار التشغيل في المكتبة
+        function playGame(gameName) {
+            alert("🚀 جاري تشغيل لعبة: " + gameName + "\nاستمتع!");
+        }
     </script>
 </body>
 </html>
