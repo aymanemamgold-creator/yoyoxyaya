@@ -2,102 +2,53 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - Yoyo X Yaya</title>
-    <!-- استدعاء Tailwind للتصميم -->
+    <title>متجر الألعاب - Yoyo X Yaya</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { 
-            background-color: #1b2838; 
-            color: #c7d5e0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        }
-        .login-card {
-            background-color: #171a21;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-        .input-field {
-            background-color: #323e4c;
-            color: white;
-            border: 1px solid #171a21;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #66c0f4; 
-        }
-        .submit-btn { 
-            background: linear-gradient(to bottom, #47bfff 5%, #1a44c2 95%);
-            color: white; 
-        }
-        .submit-btn:hover { 
-            background: linear-gradient(to bottom, #66c0f4 5%, #2b5ce6 95%);
-        }
-    </style>
 </head>
-<body class="flex items-center justify-center h-screen">
+<body class="bg-[#1b2838] text-white p-10 font-sans">
 
-    <!-- صندوق تسجيل الدخول -->
-    <div id="loginFormContainer" class="login-card w-full max-w-md p-8 rounded-lg">
-        <div class="text-center mb-8">
-            <!-- تم تعديل اللوجو هنا -->
-            <h1 class="text-3xl font-extrabold text-white tracking-wider">
-                Yoyo X <span class="text-blue-400">Yaya</span>
-            </h1>
-            <p class="text-gray-400 mt-2">قم بتسجيل الدخول للمنصة</p>
-        </div>
+    <h1 class="text-3xl font-bold mb-8">متجر Yoyo X Yaya</h1>
 
-        <form id="loginForm" class="space-y-6">
-            <!-- خانة اسم المستخدم -->
-            <div>
-                <label class="block text-sm font-bold mb-2 text-gray-300">اسم المستخدم (يوزر نيم)</label>
-                <input type="text" id="usernameInput" required class="input-field w-full p-3 rounded" placeholder="اكتب اسمك هنا...">
-            </div>
-
-            <!-- خانة كلمة المرور -->
-            <div>
-                <label class="block text-sm font-bold mb-2 text-gray-300">كلمة المرور (باسورد)</label>
-                <input type="password" id="passwordInput" required class="input-field w-full p-3 rounded" placeholder="*************">
-            </div>
-
-            <!-- زرار الدخول -->
-            <button type="submit" class="submit-btn w-full py-3 rounded font-bold text-lg tracking-wide transition">
-                تسجيل الدخول
-            </button>
-        </form>
-    </div>
-
-    <!-- رسالة الترحيب -->
-    <div id="welcomeMessage" class="hidden text-center">
-        <h2 id="roleTitle" class="text-4xl font-bold text-white mb-4"></h2>
-        <p id="roleDescription" class="text-xl text-gray-300 mb-6"></p>
-        <button onclick="location.reload()" class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-6 rounded font-bold transition">
-            تسجيل خروج (تجربة مرة أخرى)
-        </button>
+    <!-- كارت اللعبة في المتجر -->
+    <div class="bg-[#2a475e] w-80 p-5 rounded-lg shadow-lg text-center">
+        <h2 class="text-2xl font-bold mb-2">Grand Theft Auto V</h2>
+        <p class="text-gray-400 mb-4">لعبة عالم مفتوح وأكشن</p>
+        
+        <!-- المكان اللي هيظهر فيه السعر -->
+        <div id="priceTag" class="text-xl font-bold mb-4"></div>
+        
+        <!-- زرار الشراء أو التحميل -->
+        <button id="actionBtn" class="w-full py-3 rounded font-bold text-lg"></button>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); 
+        // هنا بنحدد مين اللي فاتح البرنامج دلوقتي
+        // جرب تغير الاسم ده تخليه 'ahmed' أو أي اسم تاني وشوف اللي هيحصل!
+        let currentUser = "yoyo"; 
 
-            const username = document.getElementById('usernameInput').value.toLowerCase().trim();
+        const admins = ["yoyo", "yaya"]; // قائمة أصحاب الموقع
+
+        const priceTag = document.getElementById('priceTag');
+        const actionBtn = document.getElementById('actionBtn');
+
+        // الكود بيفحص: هل المستخدم ده أدمن ولا لأ؟
+        if (admins.includes(currentUser)) {
+            // لو هو yoyo أو yaya (كل حاجة ببلاش)
+            priceTag.innerText = "مملوكة للمدير (مجاناً 🎁)";
+            priceTag.className = "text-xl font-bold mb-4 text-green-400";
             
-            // تم تعديل قائمة الأدمنز لتشمل yoyo و yaya
-            const admins = ["yoyo", "yaya"]; 
-
-            document.getElementById('loginFormContainer').classList.add('hidden');
-            document.getElementById('welcomeMessage').classList.remove('hidden');
-
-            const roleTitle = document.getElementById('roleTitle');
-            const roleDescription = document.getElementById('roleDescription');
-
-            if (admins.includes(username)) {
-                roleTitle.innerHTML = `أهلاً بك يا <span class="text-red-500">مُدير (Admin)</span> - ${username.toUpperCase()}`;
-                roleDescription.innerText = "تم فتح لوحة التحكم الخاصة بالمديرين بنجاح. يمكنك الآن إضافة ألعاب جديدة أو إدارة الأعضاء.";
-            } else {
-                roleTitle.innerHTML = `أهلاً بك يا <span class="text-blue-400">لاعب (User)</span> - ${username.toUpperCase()}`;
-                roleDescription.innerText = "تم تسجيل الدخول بنجاح! جاري تحويلك لمكتبة الألعاب الخاصة بك للاستمتاع.";
-            }
-        });
+            actionBtn.innerText = "تحميل الآن مجاناً";
+            actionBtn.className = "w-full py-3 rounded font-bold text-lg bg-green-600 hover:bg-green-500 text-white";
+        
+        } else {
+            // لو مستخدم عادي (لازم يدفع)
+            priceTag.innerText = "السعر: 50$";
+            priceTag.className = "text-xl font-bold mb-4 text-white";
+            
+            actionBtn.innerText = "شراء اللعبة";
+            actionBtn.className = "w-full py-3 rounded font-bold text-lg bg-blue-600 hover:bg-blue-500 text-white";
+        }
     </script>
+
 </body>
 </html>
