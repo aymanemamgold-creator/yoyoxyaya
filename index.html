@@ -2,53 +2,190 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>متجر الألعاب - Yoyo X Yaya</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoyo X Yaya - Launcher</title>
+    <!-- استدعاء Tailwind للتصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background-color: #1b2838; 
+            color: #c7d5e0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        .sidebar { background-color: #171a21; }
+        .game-card { 
+            background-color: #2a475e; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+        }
+        .game-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        /* زرار التشغيل الأخضر */
+        .play-btn { 
+            background: linear-gradient(to bottom, #799905 5%, #536904 95%);
+            color: #d2efa9; 
+        }
+        .play-btn:hover { 
+            background: linear-gradient(to bottom, #8ed029 5%, #6aa614 95%);
+            color: white;
+        }
+        /* القائمة الجانبية لما تكون محددة */
+        .nav-active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-weight: bold;
+            border-right: 4px solid #66c0f4;
+        }
+    </style>
 </head>
-<body class="bg-[#1b2838] text-white p-10 font-sans">
+<body class="flex h-screen overflow-hidden select-none">
 
-    <h1 class="text-3xl font-bold mb-8">متجر Yoyo X Yaya</h1>
-
-    <!-- كارت اللعبة في المتجر -->
-    <div class="bg-[#2a475e] w-80 p-5 rounded-lg shadow-lg text-center">
-        <h2 class="text-2xl font-bold mb-2">Grand Theft Auto V</h2>
-        <p class="text-gray-400 mb-4">لعبة عالم مفتوح وأكشن</p>
+    <!-- القائمة الجانبية -->
+    <div class="sidebar w-64 p-6 flex flex-col justify-between shadow-2xl z-10">
+        <div>
+            <!-- اسم المنصة -->
+            <h1 class="text-3xl font-extrabold text-white mb-10 tracking-wider text-center">
+                Yoyo X <span class="text-blue-400">Yaya</span>
+            </h1>
+            
+            <!-- أزرار التنقل -->
+            <ul class="space-y-2 text-lg">
+                <li id="btn-library" onclick="showSection('library')" class="nav-active p-3 rounded cursor-pointer transition flex items-center gap-2">
+                    <span>📚</span> المكتبة (ألعابي)
+                </li>
+                <li id="btn-store" onclick="showSection('store')" class="p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center gap-2">
+                    <span>🛒</span> المتجر (Store)
+                </li>
+            </ul>
+        </div>
         
-        <!-- المكان اللي هيظهر فيه السعر -->
-        <div id="priceTag" class="text-xl font-bold mb-4"></div>
-        
-        <!-- زرار الشراء أو التحميل -->
-        <button id="actionBtn" class="w-full py-3 rounded font-bold text-lg"></button>
+        <!-- معلومات الحساب -->
+        <div class="flex items-center gap-3 border-t border-gray-700 pt-4 mt-auto">
+            <div class="w-10 h-10 bg-gray-600 rounded-full border-2 border-blue-400"></div>
+            <div>
+                <div id="display-username" class="text-white font-bold text-sm">yoyo</div>
+                <div id="display-role" class="text-xs text-red-400">مدير النظام (Admin)</div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // هنا بنحدد مين اللي فاتح البرنامج دلوقتي
-        // جرب تغير الاسم ده تخليه 'ahmed' أو أي اسم تاني وشوف اللي هيحصل!
-        let currentUser = "yoyo"; 
-
-        const admins = ["yoyo", "yaya"]; // قائمة أصحاب الموقع
-
-        const priceTag = document.getElementById('priceTag');
-        const actionBtn = document.getElementById('actionBtn');
-
-        // الكود بيفحص: هل المستخدم ده أدمن ولا لأ؟
-        if (admins.includes(currentUser)) {
-            // لو هو yoyo أو yaya (كل حاجة ببلاش)
-            priceTag.innerText = "مملوكة للمدير (مجاناً 🎁)";
-            priceTag.className = "text-xl font-bold mb-4 text-green-400";
-            
-            actionBtn.innerText = "تحميل الآن مجاناً";
-            actionBtn.className = "w-full py-3 rounded font-bold text-lg bg-green-600 hover:bg-green-500 text-white";
+    <!-- المساحة الرئيسية لعرض المحتوى -->
+    <div class="flex-1 p-8 overflow-y-auto">
         
-        } else {
-            // لو مستخدم عادي (لازم يدفع)
-            priceTag.innerText = "السعر: 50$";
-            priceTag.className = "text-xl font-bold mb-4 text-white";
+        <!-- قسم المكتبة (Library) -->
+        <div id="section-library" class="block">
+            <div class="flex justify-between items-end mb-8 border-b border-gray-700 pb-4">
+                <h2 class="text-3xl text-white font-bold uppercase">المكتبة</h2>
+            </div>
             
-            actionBtn.innerText = "شراء اللعبة";
-            actionBtn.className = "w-full py-3 rounded font-bold text-lg bg-blue-600 hover:bg-blue-500 text-white";
-        }
-    </script>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- لعبة في المكتبة -->
+                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
+                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" class="w-full h-40 object-cover">
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h3 class="text-white font-bold text-xl mb-1">Counter-Strike 2</h3>
+                        <p class="text-xs text-gray-400 mb-4">وقت اللعب: 120 ساعة</p>
+                        <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm">▶ تشغيل</button>
+                    </div>
+                </div>
+                <!-- لعبة تانية في المكتبة -->
+                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
+                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg" class="w-full h-40 object-cover">
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h3 class="text-white font-bold text-xl mb-1">Apex Legends</h3>
+                        <p class="text-xs text-gray-400 mb-4">وقت اللعب: 45 ساعة</p>
+                        <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm">▶ تشغيل</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- قسم المتجر (Store) - مخفي في البداية -->
+        <div id="section-store" class="hidden">
+            <div class="flex justify-between items-end mb-8 border-b border-gray-700 pb-4">
+                <h2 class="text-3xl text-white font-bold uppercase">المتجر</h2>
+                <div class="text-sm text-gray-400">أحدث الألعاب</div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- لعبة GTA V في المتجر -->
+                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
+                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg" class="w-full h-40 object-cover">
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h3 class="text-white font-bold text-xl mb-2">Grand Theft Auto V</h3>
+                        <!-- السعر هيتغير برمجياً هنا -->
+                        <p class="store-price font-bold mb-4"></p> 
+                        <button class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                    </div>
+                </div>
+                
+                <!-- لعبة Red Dead في المتجر -->
+                <div class="game-card rounded shadow-lg overflow-hidden flex flex-col">
+                    <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg" class="w-full h-40 object-cover">
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h3 class="text-white font-bold text-xl mb-2">Red Dead Redemption 2</h3>
+                        <!-- السعر هيتغير برمجياً هنا -->
+                        <p class="store-price font-bold mb-4"></p> 
+                        <button class="store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm transition"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت للتحكم في الموقع -->
+    <script>
+        // --- 1. إعدادات المستخدم ---
+        // غير الاسم ده لـ 'ahmed' مثلاً عشان تشوف شكل الموقع للمستخدم العادي (بفلوس)
+        let currentUser = "yoyo"; 
+        const admins = ["yoyo", "yaya"]; 
+        const isAdmin = admins.includes(currentUser);
+
+        // تحديث معلومات الحساب تحت في القائمة
+        document.getElementById('display-username').innerText = currentUser.toUpperCase();
+        if(!isAdmin) {
+            document.getElementById('display-role').innerText = "لاعب (User)";
+            document.getElementById('display-role').className = "text-xs text-blue-400";
+        }
+
+        // --- 2. كود التنقل بين المكتبة والمتجر ---
+        function showSection(sectionName) {
+            // إخفاء كل الأقسام
+            document.getElementById('section-library').classList.add('hidden');
+            document.getElementById('section-store').classList.add('hidden');
+            
+            // إزالة التحديد من كل الأزرار
+            document.getElementById('btn-library').classList.remove('nav-active');
+            document.getElementById('btn-store').classList.remove('nav-active');
+
+            // إظهار القسم المطلوب وتحديد زره
+            document.getElementById('section-' + sectionName).classList.remove('hidden');
+            document.getElementById('btn-' + sectionName).classList.add('nav-active');
+        }
+
+        // --- 3. كود تسعير المتجر (ببلاش للأدمن، وبفلوس للناس) ---
+        const priceTags = document.querySelectorAll('.store-price');
+        const storeBtns = document.querySelectorAll('.store-btn');
+
+        priceTags.forEach((tag, index) => {
+            if (isAdmin) {
+                // لو أدمن (yoyo أو yaya)
+                tag.innerText = "مملوكة للمدير (مجاناً 🎁)";
+                tag.className = "store-price text-sm font-bold mb-4 text-green-400";
+                
+                storeBtns[index].innerText = "تحميل مجاني";
+                storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-green-600 hover:bg-green-500 text-white";
+            } else {
+                // لو مستخدم عادي
+                tag.innerText = "السعر: 50.00$";
+                tag.className = "store-price text-sm font-bold mb-4 text-white";
+                
+                storeBtns[index].innerText = "شراء اللعبة";
+                storeBtns[index].className = "store-btn py-2 px-4 rounded font-bold w-full uppercase text-sm bg-blue-600 hover:bg-blue-500 text-white";
+            }
+        });
+    </script>
 </body>
 </html>
