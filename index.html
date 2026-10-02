@@ -3,128 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoyo X Yaria - Game Launcher</title>
-    <!-- استدعاء مكتبة Tailwind للتصميم السريع -->
+    <title>تسجيل الدخول - Yoyo X Yaya</title>
+    <!-- استدعاء Tailwind للتصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* ألوان مطابقة لستايل Steam بالظبط */
         body { 
-            background-color: #1b2838; /* لون خلفية ستيم الأساسي */
+            background-color: #1b2838; 
             color: #c7d5e0; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         }
-        .sidebar { 
-            background-color: #171a21; /* لون القائمة الجانبية */
+        .login-card {
+            background-color: #171a21;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        .game-card { 
-            background-color: #2a475e; /* لون كروت الألعاب */
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s; 
-        }
-        .game-card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-        /* الزرار الأخضر بتاع التشغيل زي ستيم */
-        .play-btn { 
-            background: linear-gradient(to bottom, #799905 5%, #536904 95%);
-            color: #d2efa9; 
-            text-shadow: 1px 1px rgba(0,0,0,0.3);
-        }
-        .play-btn:hover { 
-            background: linear-gradient(to bottom, #8ed029 5%, #6aa614 95%);
+        .input-field {
+            background-color: #323e4c;
             color: white;
+            border: 1px solid #171a21;
         }
-        .nav-item.active {
-            color: #ffffff;
-            font-weight: bold;
-            background-color: rgba(255, 255, 255, 0.1);
+        .input-field:focus {
+            outline: none;
+            border-color: #66c0f4; 
+        }
+        .submit-btn { 
+            background: linear-gradient(to bottom, #47bfff 5%, #1a44c2 95%);
+            color: white; 
+        }
+        .submit-btn:hover { 
+            background: linear-gradient(to bottom, #66c0f4 5%, #2b5ce6 95%);
         }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden select-none">
+<body class="flex items-center justify-center h-screen">
 
-    <!-- القائمة الجانبية (Sidebar) -->
-    <div class="sidebar w-64 p-6 flex flex-col justify-between shadow-2xl z-10">
-        <div>
-            <!-- اسم الموقع الخاص بك -->
-            <h1 class="text-3xl font-extrabold text-white mb-10 tracking-wider text-center">
-                Yoyo X <span class="text-blue-400">Yaria</span>
+    <!-- صندوق تسجيل الدخول -->
+    <div id="loginFormContainer" class="login-card w-full max-w-md p-8 rounded-lg">
+        <div class="text-center mb-8">
+            <!-- تم تعديل اللوجو هنا -->
+            <h1 class="text-3xl font-extrabold text-white tracking-wider">
+                Yoyo X <span class="text-blue-400">Yaya</span>
             </h1>
-            
-            <!-- القوائم (Store, Library, Friends) -->
-            <ul class="space-y-2 text-lg">
-                <li class="nav-item p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center gap-2">
-                    <span>🛒</span> المتجر (Store)
-                </li>
-                <li class="nav-item active p-3 rounded cursor-pointer transition flex items-center gap-2">
-                    <span>📚</span> المكتبة (Library)
-                </li>
-                <li class="nav-item p-3 rounded cursor-pointer hover:bg-white hover:bg-opacity-5 hover:text-white transition flex items-center gap-2">
-                    <span>👥</span> الأصدقاء (Friends)
-                </li>
-            </ul>
+            <p class="text-gray-400 mt-2">قم بتسجيل الدخول للمنصة</p>
         </div>
-        
-        <!-- معلومات حساب اللاعب -->
-        <div class="flex items-center gap-3 border-t border-gray-700 pt-4 cursor-pointer hover:text-white mt-auto">
-            <div class="w-10 h-10 bg-gray-600 rounded-full border-2 border-blue-400"></div>
+
+        <form id="loginForm" class="space-y-6">
+            <!-- خانة اسم المستخدم -->
             <div>
-                <div class="text-white font-bold text-sm">Player_Yoyo</div>
-                <div class="text-xs text-blue-400">متصل (Online)</div>
+                <label class="block text-sm font-bold mb-2 text-gray-300">اسم المستخدم (يوزر نيم)</label>
+                <input type="text" id="usernameInput" required class="input-field w-full p-3 rounded" placeholder="اكتب اسمك هنا...">
             </div>
-        </div>
+
+            <!-- خانة كلمة المرور -->
+            <div>
+                <label class="block text-sm font-bold mb-2 text-gray-300">كلمة المرور (باسورد)</label>
+                <input type="password" id="passwordInput" required class="input-field w-full p-3 rounded" placeholder="*************">
+            </div>
+
+            <!-- زرار الدخول -->
+            <button type="submit" class="submit-btn w-full py-3 rounded font-bold text-lg tracking-wide transition">
+                تسجيل الدخول
+            </button>
+        </form>
     </div>
 
-    <!-- مساحة عرض الألعاب (Main Content) -->
-    <div class="flex-1 p-8 overflow-y-auto">
-        <div class="flex justify-between items-end mb-8 border-b border-gray-700 pb-4">
-            <h2 class="text-3xl text-white font-bold uppercase tracking-wide">ألعابي</h2>
-            <div class="text-sm text-gray-400">3 ألعاب جاهزة</div>
-        </div>
-        
-        <!-- شبكة الألعاب -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- رسالة الترحيب -->
+    <div id="welcomeMessage" class="hidden text-center">
+        <h2 id="roleTitle" class="text-4xl font-bold text-white mb-4"></h2>
+        <p id="roleDescription" class="text-xl text-gray-300 mb-6"></p>
+        <button onclick="location.reload()" class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-6 rounded font-bold transition">
+            تسجيل خروج (تجربة مرة أخرى)
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const username = document.getElementById('usernameInput').value.toLowerCase().trim();
             
-            <!-- اللعبة الأولى -->
-            <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
-                <!-- صورة غلاف اللعبة -->
-                <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" alt="CS2" class="w-full h-40 object-cover">
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                    <h3 class="text-white font-bold text-xl mb-1">Counter-Strike 2</h3>
-                    <p class="text-xs text-gray-400 mb-4">وقت اللعب: 120 ساعة</p>
-                    <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm tracking-wider">
-                        ▶ تشغيل
-                    </button>
-                </div>
-            </div>
+            // تم تعديل قائمة الأدمنز لتشمل yoyo و yaya
+            const admins = ["yoyo", "yaya"]; 
 
-            <!-- اللعبة الثانية -->
-            <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
-                <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/570/header.jpg" alt="Dota 2" class="w-full h-40 object-cover">
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                    <h3 class="text-white font-bold text-xl mb-1">Dota 2</h3>
-                    <p class="text-xs text-gray-400 mb-4">وقت اللعب: 45 ساعة</p>
-                    <button class="play-btn py-2 px-4 rounded font-bold w-full uppercase text-sm tracking-wider">
-                        ▶ تشغيل
-                    </button>
-                </div>
-            </div>
+            document.getElementById('loginFormContainer').classList.add('hidden');
+            document.getElementById('welcomeMessage').classList.remove('hidden');
 
-             <!-- اللعبة الثالثة (مثال للعبة تحتاج تحديث) -->
-            <div class="game-card rounded shadow-lg overflow-hidden flex flex-col cursor-pointer">
-                <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg" alt="Apex Legends" class="w-full h-40 object-cover">
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                    <h3 class="text-white font-bold text-xl mb-1">Apex Legends</h3>
-                    <p class="text-xs text-yellow-500 mb-4">تحتاج إلى تحديث</p>
-                    <!-- زر أزرق للتحديث -->
-                    <button class="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded font-bold w-full uppercase text-sm tracking-wider transition">
-                        ↻ تحديث
-                    </button>
-                </div>
-            </div>
+            const roleTitle = document.getElementById('roleTitle');
+            const roleDescription = document.getElementById('roleDescription');
 
-        </div>
-    </div>
-
+            if (admins.includes(username)) {
+                roleTitle.innerHTML = `أهلاً بك يا <span class="text-red-500">مُدير (Admin)</span> - ${username.toUpperCase()}`;
+                roleDescription.innerText = "تم فتح لوحة التحكم الخاصة بالمديرين بنجاح. يمكنك الآن إضافة ألعاب جديدة أو إدارة الأعضاء.";
+            } else {
+                roleTitle.innerHTML = `أهلاً بك يا <span class="text-blue-400">لاعب (User)</span> - ${username.toUpperCase()}`;
+                roleDescription.innerText = "تم تسجيل الدخول بنجاح! جاري تحويلك لمكتبة الألعاب الخاصة بك للاستمتاع.";
+            }
+        });
+    </script>
 </body>
 </html>
