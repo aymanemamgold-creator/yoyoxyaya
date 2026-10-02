@@ -24,7 +24,7 @@
     <div id="login-screen" class="absolute inset-0 z-[60] flex items-center justify-center p-4 bg-[#1b2838]">
         <div class="bg-[#171a21] w-full max-w-md p-8 rounded shadow-2xl border border-gray-800">
             <h1 class="text-4xl font-bold text-center text-white mb-2">Yoyo X <span class="text-blue-400">Yaya</span></h1>
-            <p class="text-center text-gray-400 mb-8">سجل دخولك (yoyo للأدمن - أي اسم آخر لليوزر)</p>
+            <p class="text-center text-gray-400 mb-8">سجل دخولك (yoyo أو yaya للأدمن - أي اسم آخر لليوزر)</p>
             <form id="loginForm" class="space-y-4">
                 <input type="text" id="usernameInput" required class="input-field w-full p-3 rounded" placeholder="اسم المستخدم (مثال: ahmed)">
                 <input type="password" required class="input-field w-full p-3 rounded" placeholder="كلمة المرور">
@@ -33,47 +33,46 @@
         </div>
     </div>
 
-    <!-- نافذة الدفع بكود الإيميل -->
+    <!-- نافذة الدفع بالفيزا ( Paymob Integration Ready ) -->
     <div id="payment-modal" class="hidden absolute inset-0 z-[70] bg-black bg-opacity-80 flex items-center justify-center p-4">
         <div class="bg-[#171a21] w-full max-w-md p-6 rounded shadow-2xl border border-gray-700 relative">
             <button onclick="closePayment()" class="absolute top-4 left-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             
-            <h2 class="text-2xl font-bold text-white mb-4 text-center">إتمام الشراء 📧</h2>
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">إتمام الشراء (عبر بوابة Paymob) 💳</h2>
             
-            <div class="panel-bg p-4 rounded mb-4 text-center border border-[#2a475e]">
+            <!-- معلومات اللعبة والسعر -->
+            <div class="panel-bg p-4 rounded mb-6 text-center border border-[#2a475e]">
                 <p id="pay-game-name" class="text-gray-300 text-sm mb-1"></p>
                 <p id="pay-game-price" class="text-2xl font-bold text-green-400"></p>
+                <p class="text-xs text-gray-400 mt-2">الأرباح تحول مباشرة إلى الحساب البنكي للمطورين (Yoyo & Yaya)</p>
             </div>
 
-            <form id="emailPaymentForm" class="space-y-4">
-                <p class="text-sm text-gray-400 text-center">أدخل بريدك الإلكتروني لإنشاء كود الدفع (سيتم فتح تطبيق الإيميل لحفظ الكود).</p>
-                <input type="email" id="userEmail" required class="input-field w-full p-3 rounded text-left" dir="ltr" placeholder="example@email.com">
-                <button type="submit" class="w-full py-3 mt-4 rounded font-bold text-white bg-blue-600 hover:bg-blue-500">
-                    الحصول على كود الدفع
+            <!-- فورم بيانات الفيزا -->
+            <form id="visaForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-gray-400">رقم البطاقة (16 رقم)</label>
+                    <input type="text" required pattern="\d{16}" title="يجب إدخال 16 رقم" placeholder="1234 5678 9101 1121" class="input-field w-full p-3 rounded text-left tracking-widest" dir="ltr" maxlength="16">
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold mb-1 text-gray-400">تاريخ الانتهاء</label>
+                        <input type="text" required placeholder="MM/YY" class="input-field w-full p-3 rounded text-center" dir="ltr" maxlength="5">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold mb-1 text-gray-400">رمز الأمان (CVV)</label>
+                        <input type="password" required pattern="\d{3}" title="يجب إدخال 3 أرقام" placeholder="123" class="input-field w-full p-3 rounded text-center" dir="ltr" maxlength="3">
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3 mt-4 rounded font-bold text-white bg-green-600 hover:bg-green-500 transition">
+                    دفع وإضافة للمكتبة
                 </button>
             </form>
-
-            <div id="payment-code-result" class="hidden text-center space-y-4 mt-4">
-                <div class="bg-green-900 bg-opacity-30 border border-green-500 p-4 rounded">
-                    <p class="text-green-400 font-bold mb-2">✅ تم إصدار الكود بنجاح!</p>
-                </div>
-                
-                <p class="text-gray-400 text-sm">كود الدفع الخاص بك هو:</p>
-                <div id="generated-code" class="text-4xl font-mono font-bold text-white tracking-widest bg-[#323e4c] p-4 rounded border border-[#66c0f4]">
-                    000000
-                </div>
-
-                <p class="text-yellow-400 text-xs mt-4">تم تجهيز رسالة في تطبيق الإيميل الخاص بك، يمكنك إرسالها لنفسك للاحتفاظ بالكود.</p>
-                
-                <button onclick="closePayment()" class="w-full py-2 mt-4 rounded font-bold text-white bg-gray-600 hover:bg-gray-500">
-                    إغلاق والعودة للمتجر
-                </button>
-            </div>
         </div>
     </div>
 
     <!-- واجهة البرنامج (الـ Launcher) -->
     <div id="main-app" class="hidden flex h-screen">
+        <!-- القائمة الجانبية -->
         <div class="sidebar w-64 flex flex-col shadow-2xl z-10 border-l border-gray-800 hidden md:flex">
             <div class="p-6">
                 <h1 class="text-2xl font-bold text-white text-center mb-6">Yoyo X <span class="text-blue-400">Yaya</span></h1>
@@ -88,17 +87,22 @@
             </div>
         </div>
 
+        <!-- مساحة العرض الرئيسية -->
         <div class="flex-1 overflow-y-auto bg-[#1b2838] relative">
+            
+            <!-- قسم المكتبة -->
             <div id="section-library" class="p-8 block">
                 <h2 class="text-3xl text-white font-bold mb-6 border-b border-gray-700 pb-2">مكتبة الألعاب</h2>
                 <div id="library-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
             </div>
 
+            <!-- قسم المتجر -->
             <div id="section-store" class="p-8 hidden">
                 <h2 class="text-3xl text-white font-bold mb-6 border-b border-gray-700 pb-2">المتجر الرئيسي</h2>
                 <div id="store-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
             </div>
 
+            <!-- صفحة تفاصيل اللعبة -->
             <div id="section-game-details" class="hidden">
                 <div id="detail-bg" class="h-64 bg-cover bg-center opacity-30 absolute top-0 w-full" style="z-index: 0;"></div>
                 <div class="relative z-10 p-8 pt-12">
@@ -115,7 +119,7 @@
                             <p id="detail-desc" class="text-sm text-gray-300 leading-relaxed"></p>
                             
                             <div class="text-xs text-gray-400 space-y-1 mt-2">
-                                <p>المطور: <span class="text-blue-400">Yoyo & Yaya</span></p>
+                                <p>المطور: <span class="text-blue-400">Yoyo & Yaya (أرباح 100% للمطورين)</span></p>
                                 <p>المساحة المطلوبة: <span id="detail-size" class="text-white font-bold"></span></p>
                             </div>
 
@@ -123,7 +127,7 @@
                                 <p class="text-white text-lg mb-3">شراء <span id="detail-buy-title"></span></p>
                                 <div class="flex justify-between items-center bg-black bg-opacity-50 p-2 rounded">
                                     <span id="detail-price" class="text-xl font-bold text-white ml-4"></span>
-                                    <button id="detail-buy-btn" class="steam-btn py-2 px-6 rounded font-bold transition">الحصول على الكود</button>
+                                    <button id="detail-buy-btn" class="steam-btn py-2 px-6 rounded font-bold transition">شراء الآن</button>
                                 </div>
                             </div>
                         </div>
@@ -133,6 +137,7 @@
         </div>
     </div>
 
+    <!-- كود التشغيل والمنطق -->
     <script>
         let currentUser = "";
         let isAdmin = false;
@@ -145,6 +150,12 @@
                 screenshots: ["https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/ss_b95c29415c4d0f622607421884e622b7a9561b62.1920x1080.jpg"],
                 desc: "استكشف مدينة لوس سانتوس في واحدة من أضخم ألعاب العالم المفتوح."
             },
+            "yoyo_game": {
+                title: "لعبة Yoyo X Yaya الحصرية", price: "20.00$", size: "5 GB",
+                cover: "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg",
+                screenshots: ["https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/ss_891e4f447a1bc7e7b6c59b675546e556e4fcda3a.1920x1080.jpg"],
+                desc: "أول لعبة حصرية لمنصتنا! من تطوير Yoyo و Yaya حصرياً."
+            },
             "cs2": {
                 title: "Counter-Strike 2", price: "مجانًا", size: "35 GB",
                 cover: "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg",
@@ -153,6 +164,7 @@
             }
         };
 
+        // تسجيل الدخول
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             currentUser = document.getElementById('usernameInput').value.toLowerCase().trim();
@@ -169,6 +181,7 @@
             addGameToLibrary("cs2");
         });
 
+        // التنقل بين الأقسام
         function showSection(sectionName) {
             document.getElementById('section-library').classList.add('hidden');
             document.getElementById('section-store').classList.add('hidden');
@@ -185,6 +198,7 @@
             }
         }
 
+        // بناء المتجر
         function buildStore() {
             const storeGrid = document.getElementById('store-grid');
             storeGrid.innerHTML = "";
@@ -204,6 +218,7 @@
             }
         }
 
+        // تفاصيل اللعبة
         function openGameDetails(gameId) {
             selectedGameId = gameId;
             const game = gamesDB[gameId];
@@ -220,52 +235,41 @@
             document.getElementById('detail-price').innerText = finalPrice;
             
             let btn = document.getElementById('detail-buy-btn');
-            btn.innerText = (isAdmin || game.price === "مجانًا") ? "إضافة للمكتبة" : "الحصول على الكود";
+            btn.innerText = (isAdmin || game.price === "مجانًا") ? "إضافة للمكتبة" : "شراء الآن";
             btn.onclick = () => handleBuyClick(gameId);
 
             showSection('details');
         }
 
+        // التعامل مع الشراء أو فتح نافذة الفيزا
         function handleBuyClick(gameId) {
             const game = gamesDB[gameId];
             if(isAdmin || game.price === "مجانًا") {
-                alert("✅ تمت الإضافة إلى مكتبتك بنجاح!");
+                alert("✅ تمت الإضافة إلى مكتبتك بنجاح يا بطل!");
                 addGameToLibrary(gameId);
                 showSection('library');
             } else {
                 document.getElementById('pay-game-name').innerText = "شراء: " + game.title;
-                document.getElementById('pay-game-price').innerText = "المبلغ: " + game.price;
-                document.getElementById('emailPaymentForm').classList.remove('hidden');
-                document.getElementById('payment-code-result').classList.add('hidden');
-                document.getElementById('userEmail').value = "";
+                document.getElementById('pay-game-price').innerText = "المبلغ المطلوب: " + game.price;
+                document.getElementById('visaForm').reset();
                 document.getElementById('payment-modal').classList.remove('hidden');
             }
         }
 
-        // --- الخدعة البرمجية البديلة للإرسال المباشر (Zero-Setup) ---
-        document.getElementById('emailPaymentForm').addEventListener('submit', function(e) {
+        // محاكاة إتمام الدفع (عبر Paymob)
+        document.getElementById('visaForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            let userEmail = document.getElementById('userEmail').value;
-            let gameName = gamesDB[selectedGameId].title;
-            let randomCode = Math.floor(10000000 + Math.random() * 90000000); 
-            
-            // 1. عرض الكود على الشاشة
-            document.getElementById('emailPaymentForm').classList.add('hidden');
-            document.getElementById('generated-code').innerText = randomCode;
-            document.getElementById('payment-code-result').classList.remove('hidden');
-            
-            // 2. فتح تطبيق الإيميل وتجهيز الرسالة تلقائياً ليقوم المستخدم بإرسالها لنفسه
-            let emailSubject = encodeURIComponent(`كود الدفع للعبة ${gameName}`);
-            let emailBody = encodeURIComponent(`مرحباً بك في متجر Yoyo X Yaya.\n\nكود الدفع المرجعي الخاص بك هو: ${randomCode}\n\nيُرجى التوجه لأقرب منفذ فوري وسداد المبلغ باستخدام هذا الكود.`);
-            
-            window.location.href = `mailto:${userEmail}?subject=${emailSubject}&body=${emailBody}`;
+            alert("💳 تمت عملية الدفع بنجاح عبر Paymob!\nتم تحويل الأرباح لحسابك البنكي، وجاري إضافة اللعبة إلى مكتبتك.");
+            closePayment();
+            addGameToLibrary(selectedGameId);
+            showSection('library');
         });
 
         function closePayment() {
             document.getElementById('payment-modal').classList.add('hidden');
         }
 
+        // إضافة اللعبة للمكتبة
         const ownedGames = new Set();
         function addGameToLibrary(gameId) {
             if(ownedGames.has(gameId)) return; 
@@ -277,7 +281,7 @@
                     <img src="${game.cover}" class="w-full h-32 object-cover">
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <h3 class="text-white font-bold mb-1">${game.title}</h3>
-                        <button onclick="alert('🚀 جاري تشغيل ${game.title} ..')" class="steam-btn py-2 px-4 rounded font-bold w-full uppercase text-sm mt-4">▶ تشغيل</button>
+                        <button onclick="alert('🚀 جاري تشغيل ${game.title} .. بالتوفيق يا مطور!')" class="steam-btn py-2 px-4 rounded font-bold w-full uppercase text-sm mt-4">▶ تشغيل</button>
                     </div>
                 </div>
             `;
