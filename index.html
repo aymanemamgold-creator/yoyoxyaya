@@ -1,0 +1,53 @@
+import tkinter as tk
+from tkinter import messagebox
+import subprocess
+import os
+
+# قاموس يحتوي على أسماء الألعاب ومسار ملف التشغيل الخاص بها على جهازك
+# يجب تغيير المسارات لتطابق مسارات الألعاب الحقيقية على جهازك
+games_library = {
+    "لعبة Solitaire": "solitaire.exe", # لعبة افتراضية في الويندوز
+    "لعبة الحاسبة": "calc.exe",      # مثال لبرنامج لغرض التجربة
+    "Minecraft": "C:\\Program Files\\Minecraft Launcher\\MinecraftLauncher.exe" 
+}
+
+def launch_game(game_name):
+    """وظيفة لتشغيل اللعبة بناءً على المسار الخاص بها"""
+    game_path = games_library.get(game_name)
+    
+    if game_path:
+        messagebox.showinfo("تشغيل", f"جاري تشغيل {game_name}...")
+        try:
+            # فتح اللعبة/البرنامج
+            subprocess.Popen(game_path)
+        except Exception as e:
+            messagebox.showerror("خطأ", f"حدث خطأ أثناء التشغيل:\n{e}")
+    else:
+        messagebox.showerror("خطأ", "مسار اللعبة غير موجود!")
+
+# إعداد واجهة المستخدم (النافذة الرئيسية)
+root = tk.Tk()
+root.title("My Game Launcher - منصتي للألعاب")
+root.geometry("400x350")
+root.configure(bg="#1b2838") # لون خلفية يشبه Steam
+
+# عنوان رئيسي
+title_label = tk.Label(root, text="مكتبة الألعاب", font=("Arial", 18, "bold"), fg="#c7d5e0", bg="#1b2838")
+title_label.pack(pady=20)
+
+# إنشاء أزرار لكل لعبة موجودة في المكتبة
+for game in games_library:
+    btn = tk.Button(
+        root, 
+        text=f"▶ تشغيل {game}", 
+        font=("Arial", 12),
+        bg="#2a475e", 
+        fg="white",
+        activebackground="#66c0f4",
+        width=25,
+        command=lambda g=game: launch_game(g) # تمرير اسم اللعبة للوظيفة
+    )
+    btn.pack(pady=10)
+
+# تشغيل البرنامج
+root.mainloop()
